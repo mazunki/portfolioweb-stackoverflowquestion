@@ -2,13 +2,15 @@ function clearURL() {
 	window.history.replaceState({}, "Rolf Vidar Hoksaas CV", location.pathname);
 }
 function loadContent(file) {
-	var request = new XMLHttpRequest();
-	request.open("GET", file+".html?_=" + new Date().getTime());
-	request.onreadystatechange=function(){
-		var loadedcontent = request.responseText;
-		document.getElementById(file).innerHTML = loadedcontent;
-	}
-	request.send();
+	return new Promise(function (resolve, reject) {
+		var request = new XMLHttpRequest();
+		request.open("GET", file+".html?_=" + new Date().getTime());
+		request.onreadystatechange=function(){
+			var loadedcontent = request.responseText;
+			document.getElementById(file).innerHTML = loadedcontent;
+		}
+		request.send();
+	});
 }
 
 function setVisible(thisdiv){
@@ -22,9 +24,12 @@ function setVisible(thisdiv){
 	loadMenues(thisdiv);
 }
 window.onload = function(){
-      loadContent("personalinfo");
-      loadContent("academicalinfo");
-      loadContent("employmentinfo");
+      Promise.all([
+		loadContent("personalinfo"),
+		loadContent("academicalinfo"),
+		loadContent("employmentinfo")
+	]).then(function() {
+		setVisible("personalinfo");
+	});
 }
-
 

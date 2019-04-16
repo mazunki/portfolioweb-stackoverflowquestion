@@ -22,6 +22,13 @@ function loadMenues(file) {
         });
 }
 /*window.onload = function(){*/ 
-	setVisible("personalinfo");
+loadMenues("personalinfo");
 /*}*/
+
+
+window.addEventListener('load', (event) => {
+        console.log("loaded");
+        setVisible("personalinfo");
+});
+
 
